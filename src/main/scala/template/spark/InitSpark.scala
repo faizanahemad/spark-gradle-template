@@ -7,7 +7,7 @@ trait InitSpark {
   val spark: SparkSession = SparkSession.builder()
                             .appName("Spark example")
                             .master("local[*]")
-                            .config("spark.some.config.option", "some-value")
+                            .config("option", "some-value")
                             .getOrCreate()
 
   val sc = spark.sparkContext
