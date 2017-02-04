@@ -1,5 +1,4 @@
-![Spark Logo](https://upload.wikimedia.org/wikipedia/commons/e/ea/Spark-logo-192x100px.png)
-# Spark-Gradle-Template
+# _Spark-Gradle-Template_
 A barebones project with scala, apache spark built using gradle. Spark-shell provides `spark` and `sc` variables pre-initialised, here I did the same using a *scala trait* that you can extend.
 
 ## Prerequisites
