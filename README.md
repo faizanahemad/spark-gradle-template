@@ -1,5 +1,6 @@
+![Spark Scala Logos](https://cdn.intellipaat.com/mediaFiles/2014/09/Apache-Spark-Training-And-Scala-Training.jpg)
 # Spark-Gradle-Template
-A barebones project with scala, apache spark built using gradle. Can be used when you need a spark skeleton project for fast bootstrapping.
+A barebones project with scala, apache spark built using gradle. Spark-shell provides `spark` and `sc` variables pre-initialised, here I did the same using a *scala trait* that you can extend.
 
 ## Libraries Included
 - Spark - 2.1.0
@@ -29,6 +30,60 @@ In this class, I do 4 things
 - Find sum from 1 to 100 (inclusive).
 - Read a csv file into a structured `DataSet`. 
 - Find average age of persons from the csv.
+
+**InitSpark.scala**
+```scala
+trait InitSpark {
+  val spark: SparkSession = SparkSession.builder().appName("Spark example").master("local[*]")
+                            .config("spark.some.config.option", "some-value").getOrCreate()
+  val sc = spark.sparkContext
+  val sqlContext = spark.sqlContext
+  def reader = spark.read.option("header",true).option("inferSchema", true).option("mode", "DROPMALFORMED")
+  def readerWithoutHeader = spark.read.option("header",true).option("inferSchema", true).option("mode", "DROPMALFORMED")
+  private def init = {
+    sc.setLogLevel("ERROR")
+    Logger.getLogger("org").setLevel(Level.ERROR)
+    Logger.getLogger("akka").setLevel(Level.ERROR)
+    LogManager.getRootLogger.setLevel(Level.ERROR)
+  }
+  init
+  def close = {
+    spark.close()
+  }
+}
+```
+
+**Main.scala**
+```scala
+final case class Person(firstName: String, lastName: String, country: String, age: Int)
+
+object Main extends InitSpark {
+  def main(args: Array[String]) = {
+    import spark.implicits._
+
+    val version = spark.version
+    println("VERSION_STRING = " + version)
+
+    val sumHundred = spark.range(1, 101).reduce(_ + _)
+    println(sumHundred)
+
+    val persons = reader.csv("people-example.csv").as[Person]
+    val averageAge = persons.agg(avg("age")).first.get(0).asInstanceOf[Double]
+    println(f"Average Age: $averageAge%.2f")
+
+    close
+  }
+}
+```
+
+## Using this Repo
+Just import it into your favorite IDE as a gradle project. Tested with IntelliJ to work. Or use your favorite editor and build from command line with gradle.
+
+## Useful Links
+- [Spark Docs - Root Page](http://spark.apache.org/docs/latest/)
+- [Spark Programming Guide](http://spark.apache.org/docs/latest/programming-guide.html)
+- [Spark Latest API docs](http://spark.apache.org/docs/latest/api/)
+- [Scala API Docs](http://www.scala-lang.org/api/2.12.1/scala/)
  
 ## Issues or Suggestions
 
