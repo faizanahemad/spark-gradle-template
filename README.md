@@ -33,4 +33,4 @@ In this class, I do 4 things
 ## Issues or Suggestions
 
 - Raise one on github
-- Send me a mail -> fahemad3+github @ gmail .<you know this> (Remove the spaces)
+- Send me a mail -> fahemad3+github @ gmail dot com (Remove the spaces and dot = .)
