@@ -17,7 +17,7 @@ trait InitSpark {
                .option("inferSchema", true)
                .option("mode", "DROPMALFORMED")
   def readerWithoutHeader = spark.read
-                            .option("header",true)
+                            .option("header",false)
                             .option("inferSchema", true)
                             .option("mode", "DROPMALFORMED")
   private def init = {
