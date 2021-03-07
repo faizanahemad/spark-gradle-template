@@ -12,11 +12,11 @@ object Main extends InitSpark {
     val version = spark.version
     println("SPARK VERSION = " + version)
 
-    val sumHundred = spark.range(1, 101).reduce(_ + _)
+    val sumHundred = spark.range(1, 101).reduce( (a,b) => Long.box(a + b) )
     println(f"Sum 1 to 100 = $sumHundred")
 
     println("Reading from csv file: people-example.csv")
-    val persons = reader.csv("people-example.csv").as[Person]
+    val persons = reader.csv("/opt/spark-data/people-example.csv").as[Person]
     persons.show(2)
     val averageAge = persons.agg(avg("age"))
                      .first.get(0).asInstanceOf[Double]

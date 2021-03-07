@@ -1,3 +1,14 @@
+> Task :shadowJar
+Property 'transformers.$0.data' is not annotated with an input or output annotation. This behaviour has been deprecated and is scheduled to be removed in Gradle 7.0.
+-warning-mode all
+
+https://github.com/johnrengelman/shadow/issues/601
+
+/gradlew -warning-mode all clean build test shadowJar
+
+https://discuss.gradle.org/t/message-about-archiveversion-seems-misleading-or-incomplete/35079/11
+
+
 # _Spark-Gradle-Template_
 A barebones project with scala, apache spark built using gradle. Spark-shell provides `spark` and `sc` variables pre-initialised, here I did the same using a *scala trait* that you can extend.
 
@@ -22,16 +33,16 @@ A barebones project with scala, apache spark built using gradle. Spark-shell pro
 ## What the demo does?
 Take a look at *src->main->scala->template->spark* directory
 
-We have two Items here. 
+We have two Items here.
 
 The trait `InitSpark` which is extended by any class that wants to run spark code. This trait has all the code for initialization. I have also supressed the logging to only error levels for less noise.
 
-The file `Main.scala` has the executable class `Main`. 
+The file `Main.scala` has the executable class `Main`.
 In this class, I do 4 things
 
 - Print spark version.
 - Find sum from 1 to 100 (inclusive).
-- Read a csv file into a structured `DataSet`. 
+- Read a csv file into a structured `DataSet`.
 - Find average age of persons from the csv.
 
 **InitSpark.scala**
@@ -90,7 +101,7 @@ Just import it into your favorite IDE as a gradle project. Tested with IntelliJ 
 - [Spark Programming Guide](http://spark.apache.org/docs/latest/programming-guide.html)
 - [Spark Latest API docs](http://spark.apache.org/docs/latest/api/)
 - [Scala API Docs](http://www.scala-lang.org/api/2.12.1/scala/)
- 
+
 ## Issues or Suggestions
 
 - Raise one on github
