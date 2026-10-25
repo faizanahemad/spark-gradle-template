@@ -96,3 +96,4 @@ Just import it into your favorite IDE as a gradle project. Tested with IntelliJ 
 - Raise one on github
 - Send me a mail -> fahemad3+github @ gmail dot com (Remove the spaces and dot = .)
 # scala_spark
+# scala_spark
