@@ -1,83 +1,48 @@
 plugins {
-    id 'java'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-}
-
-group 'template.spark'
-version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-apply plugin: 'scala'
-apply plugin: 'idea'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-configurations {
-    provided
-}
-
-sourceSets {
-    main {
-        compileClasspath += configurations.provided
-    }
-}
-
-repositories {
-    jcenter()
-    mavenLocal()
-    mavenCentral()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
-}
-
-dependencies {
-    compile "org.scala-lang:scala-library:"+scalaVersion
-    compile "org.scala-lang:scala-reflect:"+scalaVersion
-    compile "org.scala-lang:scala-compiler:"+scalaVersion
-
-    compile 'org.apache.spark:spark-mllib_2.11:2.1.0'
-    compile 'org.apache.spark:spark-sql_2.11:2.1.0'
-    compile 'org.apache.spark:spark-streaming-flume-assembly_2.11:2.1.0'
-    compile 'org.apache.spark:spark-graphx_2.11:2.1.0'
-    compile 'org.apache.spark:spark-launcher_2.11:2.1.0'
-    compile 'org.apache.spark:spark-catalyst_2.11:2.1.0'
-    compile 'org.apache.spark:spark-streaming_2.11:2.1.0'
-    compile 'org.apache.spark:spark-core_2.11:2.1.0'
-
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
-}
-
-task run(type: JavaExec, dependsOn: classes) {
-    main = mainClassFile
-    classpath sourceSets.main.runtimeClasspath
-    classpath configurations.runtime
-}
-
-jar {
-    classifier = 'all'
-    manifest {
-        attributes 'Implementation-Title': title,
-                'Implementation-Version': version,
-                'Main-Class': mainClassFile
-    }
-    include{sourceSets.main.output.classesDir}
-    zip64 true
+    id 'scala'
+    id 'application'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 shadowJar {
-    classifier = 'shadow'
-    append 'reference.conf'
-    dependencies {
-
-    }
+    zip64 = true
 }
 
-idea {
-    module {
-        // IntelliJ does not know about the standard idiom of provided as used in managing
-        // uber/shaded jar dependencies. Make it so!
-        scopes.PROVIDED.plus += [ configurations.provided ]
-    }
+group = 'template.spark'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.scala-lang:scala-library:2.12.18'
+
+    implementation 'org.apache.spark:spark-sql_2.12:3.5.7'
+    implementation 'org.apache.spark:spark-mllib_2.12:3.5.7'
+    implementation 'org.apache.spark:spark-streaming_2.12:3.5.7'
+    implementation 'org.apache.spark:spark-graphx_2.12:3.5.7'
+
+    implementation 'commons-io:commons-io:2.16.1'
+}
+
+application {
+    mainClass = 'template.spark.Main'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(ScalaCompile).configureEach {
+    scalaCompileOptions.additionalParameters = ['-deprecation', '-feature']
+}
+
+tasks.named('run') {
+    jvmArgs(
+            '--add-exports=java.base/sun.nio.ch=ALL-UNNAMED',
+            '--add-opens=java.base/sun.nio.ch=ALL-UNNAMED'
+    )
 }
